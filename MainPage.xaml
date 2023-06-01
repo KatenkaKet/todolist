@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:modelll='clr-namespace:todolist.Modelll'
+             xmlns:viewmodel='clr-namespace:todolist.ViewModel'
+             x:DataType="{x:Type viewmodel:ViewModel}"
+             x:Class="todolist.MainPage">
+    
+    <StackLayout Margin = "20">
+        <Grid Margin="20" ColumnSpacing="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Entry x:Name="entry"
+                   x:DataType="viewmodel:ViewModel"
+                   Placeholder="Enter your task"
+                   Grid.Column="0"
+                   ClearButtonVisibility="WhileEditing"
+                   />
+            <Button Text="Add"
+                    Grid.Column="1"
+                    x:DataType="viewmodel:ViewModel"
+                    Command="{Binding CommandAddTask}"
+                    CommandParameter="{Binding Source={x:Reference entry}, Path=Text}"
+                    BackgroundColor="{Binding CheckColor}"/>
+        </Grid>
+        <Grid Margin="20" ColumnSpacing="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions> 
+            <Button
+                x:DataType="viewmodel:ViewModel"
+                Command="{Binding CommandChangeColor}"
+                CommandParameter="Red"
+                Background="Red"
+                Grid.Column="0"
+            />
+            <Button
+                x:DataType="viewmodel:ViewModel"
+                Command="{Binding CommandChangeColor}"
+                CommandParameter="Blue"
+                Background="Blue"
+                Grid.Column="1"
+                />
+            <Button
+                x:DataType="viewmodel:ViewModel"
+                Command="{Binding CommandChangeColor}"
+                CommandParameter="Yellow"
+                Background="Yellow"
+                Grid.Column="2"
+            />
+        </Grid>
+        <ScrollView>
+            <ListView
+                x:DataType="viewmodel:ViewModel"
+                ItemsSource="{Binding ListTaskItems}"
+                SelectedItem="{Binding SelectTask, Mode=TwoWay}"
+                >
+                <ListView.ItemTemplate>
+                    <DataTemplate 
+                        x:DataType="modelll:Modelll">
+                        <ViewCell>
+                            <Grid Margin="20" ColumnSpacing="15">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions> 
+                                <CheckBox Grid.Column="0"
+                                          IsChecked="{Binding TaskCompleted}"/>
+                                <Button Grid.Column="1"
+                                        BackgroundColor="{Binding TaskColor}"
+                                        Command="{Binding Source={RelativeSource FindAncestorBindingContext, 
+                                                  AncestorType={x:Type viewmodel:ViewModel}}, Path=CommandChooseColor}"
+                                        CommandParameter="{Binding }"/>
+                                <Label Grid.Column="2"
+                                       x:DataType="modelll:Modelll"
+                                       Text="{Binding TaskName}"
+                                       LineBreakMode="TailTruncation"
+                                       VerticalOptions="Center"/>
+                                <Button Grid.Column="3"
+                                        CommandParameter="{Binding}"
+                                        Text="X"
+                                        Command="{Binding Source={RelativeSource FindAncestorBindingContext,
+                                                  AncestorType={x:Type viewmodel:ViewModel}}, Path=CommandDeleteTask}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+    </StackLayout>
+    
+
+</ContentPage>
